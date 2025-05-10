@@ -15,6 +15,10 @@ enum PieceColor {
 struct Position {
 	int x;
 	int y;
+
+	bool operator ==(const Position& other) const {
+		return x == other.x && y == other.y;
+	}
 };
 
 class Piece {
@@ -24,6 +28,7 @@ public:
 	PieceType getType() const;
 	PieceColor getColor() const;
 	Position getPosition() const;
+	void setPosition(Position pos);
 private:
 	PieceType type;
 	PieceColor color;

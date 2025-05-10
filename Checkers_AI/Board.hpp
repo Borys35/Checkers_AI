@@ -1,25 +1,35 @@
 #pragma once
 
 #include <vector>
+#include <optional>
+#include <functional>
+#include <algorithm>
 #include "Piece.hpp"
 
+//class Piece;
+//struct Position;
+
 struct Move {
-	Piece& piece;
+	Piece *piece;
 	Position newPos;
-	bool isCapture;
+	Piece *capturePiece = nullptr;
 };
 
 class Board {
 public:
 	Board();
 	~Board();
-	std::vector<Move> getValidMoves(const Piece& piece);
-	void makeMove(const Move& move);
+	std::vector<Move> getValidMoves(Piece& piece);
+	std::optional<std::reference_wrapper<Piece>> getPieceAt(const Position pos);
+	void makeMove(Move& move);
 
 private:
+	void capture(Piece& piece);
 	int board[8][8] = { 0 };
-	int whitePieces = 12;
-	int blackPieces = 12;
+	int width = 8;
+	int height = 8;
+	int whitePiecesCount = 12;
+	int blackPiecesCount = 12;
 	std::vector<Piece> whitePieces;
 	std::vector<Piece> blackPieces;
 	PieceColor currentColor = WHITE;

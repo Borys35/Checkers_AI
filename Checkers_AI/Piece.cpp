@@ -21,3 +21,7 @@ PieceType Piece::getType() const {
 Position Piece::getPosition() const {
 	return position;
 }
+
+void Piece::setPosition(Position pos) {
+	position = pos;
+}
