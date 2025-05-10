@@ -11,7 +11,7 @@ int main()
 
     sf::RenderWindow window(sf::VideoMode({ 1024, 768 }), "Checkers");
 
-	std::cout << "window created" << std::endl;
+	std::cout << "Window created" << std::endl;
 
 
     while (window.isOpen())

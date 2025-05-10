@@ -15,6 +15,16 @@ void Display::recordMouseClick(const sf::Event::MouseButtonPressed* event) {
 		selectedPiece = nullptr;
 		board.restart();
 	}
+	else if (mousePos.x > 768 && mousePos.x <= 896 && mousePos.y > 500 && mousePos.y <= 600) {
+		// vs AI
+		selectedPiece = nullptr;
+		board.restart();
+	}
+	else if (mousePos.x > 896 && mousePos.x <= 1024 && mousePos.y > 500 && mousePos.y <= 600) {
+		// vs Player
+		selectedPiece = nullptr;
+		board.restart();
+	}
 
 	int x = mousePos.x / 96;
 	int y = mousePos.y / 96;
@@ -66,10 +76,20 @@ void Display::drawBoard(sf::RenderWindow& window) {
 			auto piece = board.getPieceAt({ i, j });
 			if (piece) {
 				if (piece->get().getColor() == WHITE) {
-					circle.setFillColor(sf::Color::Green);
+					if (piece->get().getType() == KING) {
+						circle.setFillColor(sf::Color(33, 130, 33));
+					}
+					else {
+						circle.setFillColor(sf::Color::Green);
+					}
 				}
 				else {
-					circle.setFillColor(sf::Color::Red);
+					if (piece->get().getType() == KING) {
+						circle.setFillColor(sf::Color(130, 33, 33));
+					}
+					else {
+						circle.setFillColor(sf::Color::Red);
+					}
 				}
 				circle.setPosition({ i * 96.f + 16.f, j * 96.f + 16.f });
 				window.draw(circle);
@@ -87,10 +107,21 @@ void Display::drawBoard(sf::RenderWindow& window) {
 		}
 	}
 
-	// Draw restart button
+	// Draw buttons
 	rect.setFillColor(sf::Color::Black);
 	rect.setPosition({ 768.f, 600.f });
 	rect.setSize({ 256.f, 168.f });
+	window.draw(rect);
+
+
+	rect.setFillColor(sf::Color::Yellow);
+	rect.setPosition({ 768.f, 500.f });
+	rect.setSize({ 128.f, 100.f });
+	window.draw(rect);
+
+	rect.setFillColor(sf::Color::Green);
+	rect.setPosition({ 896.f, 500.f });
+	rect.setSize({ 128.f, 100.f });
 	window.draw(rect);
 
 	// Draw text
@@ -104,5 +135,17 @@ void Display::drawBoard(sf::RenderWindow& window) {
 	text.setCharacterSize(16);
 	text.setFillColor(sf::Color::Red);
 	text.setPosition({ 768.f, 600.f });
+	window.draw(text);
+
+	text.setString("vs AI");
+	text.setCharacterSize(16);
+	text.setFillColor(sf::Color::Red);
+	text.setPosition({ 768.f, 500.f });
+	window.draw(text);
+
+	text.setString("vs Player");
+	text.setCharacterSize(16);
+	text.setFillColor(sf::Color::Red);
+	text.setPosition({ 896.f, 500.f });
 	window.draw(text);
 }

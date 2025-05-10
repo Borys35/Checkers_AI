@@ -64,6 +64,11 @@ void Board::capture(Piece& piece) {
 			blackPieces.end()
 		);
 	}
+
+	if (blackPiecesCount == 0 || whitePiecesCount == 0) {
+		gameOver = true;
+		std::cout << "Game Over!" << std::endl;
+	}
 }
 
 std::optional<std::reference_wrapper<Piece>> Board::getPieceAt(const Position pos) {
