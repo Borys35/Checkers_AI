@@ -10,6 +10,12 @@ Display::~Display() {
 
 void Display::recordMouseClick(const sf::Event::MouseButtonPressed* event) {
 	sf::Vector2i mousePos = event->position;
+
+	if (mousePos.x > 768 && mousePos.x <= 1024 && mousePos.y > 600 && mousePos.y <= 768) {
+		selectedPiece = nullptr;
+		board.restart();
+	}
+
 	int x = mousePos.x / 96;
 	int y = mousePos.y / 96;
 	if (x >= 0 && x < width && y >= 0 && y < height) {
@@ -40,6 +46,9 @@ void Display::drawBoard(sf::RenderWindow& window) {
 
 	sf::CircleShape smallCircle(8.f);
 	smallCircle.setFillColor(sf::Color::Blue);
+
+	sf::Font font("inter.ttf");
+	sf::Text text(font);
 
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
@@ -77,4 +86,23 @@ void Display::drawBoard(sf::RenderWindow& window) {
 			}
 		}
 	}
+
+	// Draw restart button
+	rect.setFillColor(sf::Color::Black);
+	rect.setPosition({ 768.f, 600.f });
+	rect.setSize({ 256.f, 168.f });
+	window.draw(rect);
+
+	// Draw text
+	text.setString("Checkers");
+	text.setCharacterSize(24);
+	text.setFillColor(sf::Color::Red);
+	text.setPosition({ 768.f, 0.f });
+	window.draw(text);
+
+	text.setString("Restart");
+	text.setCharacterSize(16);
+	text.setFillColor(sf::Color::Red);
+	text.setPosition({ 768.f, 600.f });
+	window.draw(text);
 }

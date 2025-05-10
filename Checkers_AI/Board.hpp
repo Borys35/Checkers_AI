@@ -24,8 +24,7 @@ public:
 	std::vector<Move> getValidMoves(Piece& piece);
 	std::optional<std::reference_wrapper<Piece>> getPieceAt(const Position pos);
 	void makeMove(Move& move);
-
-	// void draw(sf::RenderWindow& window, sf::Vector2i eventPos);
+	void restart();
 
 private:
 	void capture(Piece& piece);

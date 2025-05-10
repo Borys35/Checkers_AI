@@ -2,7 +2,14 @@
 
 #include "Board.hpp"
 
-Board::Board() {
+void Board::restart() {
+	whitePieces.clear();
+	blackPieces.clear();
+	whitePiecesCount = 12;
+	blackPiecesCount = 12;
+	currentColor = WHITE;
+	gameOver = false;
+
 	whitePieces.push_back(Piece(MAN, WHITE, { 0, 7 }));
 	whitePieces.push_back(Piece(MAN, WHITE, { 0, 5 }));
 	whitePieces.push_back(Piece(MAN, WHITE, { 1, 6 }));
@@ -29,6 +36,10 @@ Board::Board() {
 	blackPieces.push_back(Piece(MAN, BLACK, { 6, 1 }));
 	blackPieces.push_back(Piece(MAN, BLACK, { 7, 0 }));
 	blackPieces.push_back(Piece(MAN, BLACK, { 7, 2 }));
+}
+
+Board::Board() {
+	restart();
 }
  
 Board::~Board() {
