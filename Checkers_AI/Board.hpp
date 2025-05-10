@@ -4,6 +4,8 @@
 #include <optional>
 #include <functional>
 #include <algorithm>
+#include <SFML/Graphics.hpp>
+
 #include "Piece.hpp"
 
 //class Piece;
@@ -22,6 +24,8 @@ public:
 	std::vector<Move> getValidMoves(Piece& piece);
 	std::optional<std::reference_wrapper<Piece>> getPieceAt(const Position pos);
 	void makeMove(Move& move);
+
+	// void draw(sf::RenderWindow& window, sf::Vector2i eventPos);
 
 private:
 	void capture(Piece& piece);

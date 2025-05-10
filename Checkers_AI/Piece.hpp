@@ -29,6 +29,7 @@ public:
 	PieceColor getColor() const;
 	Position getPosition() const;
 	void setPosition(Position pos);
+	void setType(PieceType t);
 private:
 	PieceType type;
 	PieceColor color;
