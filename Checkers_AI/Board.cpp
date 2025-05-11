@@ -86,12 +86,44 @@ std::optional<std::reference_wrapper<Piece>> Board::getPieceAt(const Position po
 }
 
 void Board::makeMove(Move& move) {
+	auto changeTurn = [](Board *board) {
+		if (board->currentColor == WHITE) {
+			board->currentColor = BLACK;
+		}
+		else {
+			board->currentColor = WHITE;
+		}
+	};
+
 	// new position
 	move.piece->setPosition(move.newPos);
 
 	// capture
 	if (move.capturePiece != nullptr) {
 		capture(*move.capturePiece);
+
+		// check for more captures for selected piece.
+		std::vector<Move> validMoves = getValidMoves(*move.piece, false);
+		bool changeTurnFlag = true;
+		if (validMoves.empty()) {
+			// change turn
+			changeTurn(this);
+		}
+		else {
+			for (auto& validMove : validMoves) {
+				if (validMove.capturePiece != nullptr) {
+					changeTurnFlag = false;
+					break;
+				}
+			}
+			if (changeTurnFlag) {
+				changeTurn(this);
+			}
+		}
+	}
+	else {
+		// change turn
+		changeTurn(this);
 	}
 
 	// promote to king
@@ -100,14 +132,6 @@ void Board::makeMove(Move& move) {
 	}
 	else if (move.piece->getColor() == BLACK && move.piece->getPosition().y == height - 1) {
 		move.piece->setType(KING);
-	}
-
-	// change turn
-	if (move.piece->getColor() == WHITE) {
-		currentColor = BLACK;
-	}
-	else {
-		currentColor = WHITE;
 	}
 }
 
