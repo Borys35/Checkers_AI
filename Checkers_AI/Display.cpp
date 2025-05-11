@@ -14,17 +14,17 @@ void Display::recordMouseClick(const sf::Event::MouseButtonPressed* event) {
 	if (mousePos.x > 768 && mousePos.x <= 1024 && mousePos.y > 600 && mousePos.y <= 768) {
 		// Switch sides
 		selectedPiece = nullptr;
-		board.restart();
+		board.restart(true);
 	}
 	else if (mousePos.x > 768 && mousePos.x <= 896 && mousePos.y > 500 && mousePos.y <= 600) {
 		// vs AI
 		selectedPiece = nullptr;
-		board.restart();
+		board.restart(false);
 	}
 	else if (mousePos.x > 896 && mousePos.x <= 1024 && mousePos.y > 500 && mousePos.y <= 600) {
 		// vs Player
 		selectedPiece = nullptr;
-		board.restart();
+		board.restart(false);
 	}
 
 	int x = mousePos.x / 96;
@@ -76,7 +76,8 @@ void Display::drawBoard(sf::RenderWindow& window) {
 			// Draw pieces
 			auto piece = board.getPieceAt({ i, j });
 			if (piece) {
-				if (piece->get().getColor() == WHITE) {
+				if ((piece->get().getColor() == WHITE && board.isBottomPlayerWhite()) ||
+					(piece->get().getColor() == BLACK && !board.isBottomPlayerWhite())) {
 					if (piece->get().getType() == KING) {
 						circle.setFillColor(sf::Color(33, 130, 33));
 					}

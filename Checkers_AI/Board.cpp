@@ -2,13 +2,30 @@
 
 #include "Board.hpp"
 
-void Board::restart() {
+bool Board::isGameOver() const {
+	return gameOver;
+}
+
+bool Board::isBottomPlayerWhite() const {
+	return bottomPlayerWhite;
+}
+
+void Board::restart(bool switchSides) {
 	whitePieces.clear();
 	blackPieces.clear();
 	whitePiecesCount = 12;
 	blackPiecesCount = 12;
-	currentColor = WHITE;
 	gameOver = false;
+
+	if (switchSides) {
+		bottomPlayerWhite = !bottomPlayerWhite;
+		if (bottomPlayerWhite) {
+			currentColor = WHITE;
+		}
+		else {
+			currentColor = BLACK;
+		}
+	}
 
 	whitePieces.push_back(Piece(MAN, WHITE, { 0, 7 }));
 	whitePieces.push_back(Piece(MAN, WHITE, { 0, 5 }));
@@ -39,7 +56,7 @@ void Board::restart() {
 }
 
 Board::Board() {
-	restart();
+	restart(false);
 }
  
 Board::~Board() {

@@ -8,9 +8,6 @@
 
 #include "Piece.hpp"
 
-//class Piece;
-//struct Position;
-
 struct Move {
 	Piece *piece;
 	Position newPos;
@@ -25,11 +22,12 @@ public:
 	std::vector<Move> getAllValidMoves();
 	std::optional<std::reference_wrapper<Piece>> getPieceAt(const Position pos);
 	void makeMove(Move& move);
-	void restart();
+	void restart(bool switchSides);
+	bool isGameOver() const;
+	bool isBottomPlayerWhite() const;
 
 private:
 	void capture(Piece& piece);
-	int board[8][8] = { 0 };
 	int width = 8;
 	int height = 8;
 	int whitePiecesCount = 12;
@@ -37,5 +35,6 @@ private:
 	std::vector<Piece> whitePieces;
 	std::vector<Piece> blackPieces;
 	PieceColor currentColor = WHITE;
+	bool bottomPlayerWhite = true;
 	bool gameOver = false;
 };
