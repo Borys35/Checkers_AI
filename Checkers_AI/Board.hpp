@@ -25,6 +25,7 @@ public:
 	void restart(bool switchSides);
 	bool isGameOver() const;
 	bool isBottomPlayerWhite() const;
+	int evaluateBoard() const;
 
 private:
 	void capture(Piece& piece);

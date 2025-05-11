@@ -10,6 +10,10 @@ bool Board::isBottomPlayerWhite() const {
 	return bottomPlayerWhite;
 }
 
+int Board::evaluateBoard() const {
+	return whitePiecesCount - blackPiecesCount;
+}
+
 void Board::restart(bool switchSides) {
 	whitePieces.clear();
 	blackPieces.clear();
