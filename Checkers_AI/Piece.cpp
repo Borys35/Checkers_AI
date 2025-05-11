@@ -29,3 +29,7 @@ void Piece::setPosition(Position pos) {
 void Piece::setType(PieceType t) {
 	type = t;
 }
+
+bool Piece::operator==(const Piece& other) const {
+	return position == other.position && type == other.type && color == other.color;
+}

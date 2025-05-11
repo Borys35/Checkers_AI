@@ -111,8 +111,61 @@ void Board::makeMove(Move& move) {
 	}
 }
 
-std::vector<Move> Board::getValidMoves(Piece& piece) {
+std::vector<Move> Board::getAllValidMoves() {
+	std::vector<Move> allMoves;
+	std::vector<Move> allJumps;
+
+	if (currentColor == WHITE) {
+		for (auto& piece : whitePieces) {
+			auto moves = getValidMoves(piece, false);
+			if (!moves.empty()) {
+				for (auto& move : moves) {
+					if (move.capturePiece != nullptr) {
+						allJumps.push_back(move);
+					}
+					else {
+						allMoves.push_back(move);
+					}
+				}
+			}
+		}
+	}
+	else {
+		for (auto& piece : blackPieces) {
+			auto moves = getValidMoves(piece, false);
+			if (!moves.empty()) {
+				for (auto& move : moves) {
+					if (move.capturePiece != nullptr) {
+						allJumps.push_back(move);
+					}
+					else {
+						allMoves.push_back(move);
+					}
+				}
+			}
+		}
+	}
+
+	if (!allJumps.empty()) {
+		return allJumps;
+	}
+	else {
+		return allMoves;
+	}
+}
+
+std::vector<Move> Board::getValidMoves(Piece& piece, bool checkValidMoves) {
 	std::vector<Move> moves;
+
+	if (checkValidMoves) {
+		std::vector<Move> allValidMoves = getAllValidMoves();
+		for (auto& move : allValidMoves) {
+			if (*move.piece == piece) {
+				moves.push_back(move);
+			}
+		}
+		return moves;
+	}
 
 	if (piece.getColor() == currentColor) {
 		if (piece.getType() == MAN) {

@@ -21,7 +21,8 @@ class Board {
 public:
 	Board();
 	~Board();
-	std::vector<Move> getValidMoves(Piece& piece);
+	std::vector<Move> getValidMoves(Piece& piece, bool checkAllMoves);
+	std::vector<Move> getAllValidMoves();
 	std::optional<std::reference_wrapper<Piece>> getPieceAt(const Position pos);
 	void makeMove(Move& move);
 	void restart();

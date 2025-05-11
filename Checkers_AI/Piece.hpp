@@ -30,6 +30,7 @@ public:
 	Position getPosition() const;
 	void setPosition(Position pos);
 	void setType(PieceType t);
+	bool operator==(const Piece& other) const;
 private:
 	PieceType type;
 	PieceColor color;

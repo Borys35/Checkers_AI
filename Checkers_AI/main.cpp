@@ -34,7 +34,6 @@ int main()
 
         window.clear(sf::Color(100, 0, 0, 255));
 
-        // board.draw(window, mouseClickPos);
         display.drawBoard(window);
 
         window.display();

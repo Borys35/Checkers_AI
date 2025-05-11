@@ -12,6 +12,7 @@ void Display::recordMouseClick(const sf::Event::MouseButtonPressed* event) {
 	sf::Vector2i mousePos = event->position;
 
 	if (mousePos.x > 768 && mousePos.x <= 1024 && mousePos.y > 600 && mousePos.y <= 768) {
+		// Switch sides
 		selectedPiece = nullptr;
 		board.restart();
 	}
@@ -34,7 +35,7 @@ void Display::recordMouseClick(const sf::Event::MouseButtonPressed* event) {
 			selectedPiece = &piece->get();
 		}
 		else if (selectedPiece) {
-			std::vector<Move> moves = board.getValidMoves(*selectedPiece);
+			std::vector<Move> moves = board.getValidMoves(*selectedPiece, true);
 			for (auto& move : moves) {
 				if (move.newPos.x == x && move.newPos.y == y) {
 					// Move the piece
@@ -97,7 +98,7 @@ void Display::drawBoard(sf::RenderWindow& window) {
 
 			// Draw valid moves
 			if (selectedPiece != nullptr) {
-				std::vector<Move> moves = board.getValidMoves(*selectedPiece);
+				std::vector<Move> moves = board.getValidMoves(*selectedPiece, true);
 
 				for (auto &move : moves) {
 					smallCircle.setPosition({ move.newPos.x * 96.f + 40.f, move.newPos.y * 96.f + 40.f });
@@ -126,12 +127,13 @@ void Display::drawBoard(sf::RenderWindow& window) {
 
 	// Draw text
 	text.setString("Checkers");
-	text.setCharacterSize(24);
+	text.setCharacterSize(32);
 	text.setFillColor(sf::Color::Red);
 	text.setPosition({ 768.f, 0.f });
 	window.draw(text);
 
-	text.setString("Restart");
+	// TODO: Add switch sides functionality
+	text.setString("Switch sides");
 	text.setCharacterSize(16);
 	text.setFillColor(sf::Color::Red);
 	text.setPosition({ 768.f, 600.f });
