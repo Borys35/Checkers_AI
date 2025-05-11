@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "Board.hpp"
+#include "AI.h"
 
 bool Board::isGameOver() const {
 	return gameOver;
@@ -10,8 +11,23 @@ bool Board::isBottomPlayerWhite() const {
 	return bottomPlayerWhite;
 }
 
+bool Board::isVsAI() const {
+	return vsAI;
+}
+
 int Board::evaluateBoard() const {
-	return whitePiecesCount - blackPiecesCount;
+	int score = whitePiecesCount - blackPiecesCount;
+	for (const auto& piece : whitePieces) {
+		if (piece.getType() == KING) {
+			score += 2; // Kings are worth more
+		}
+	}
+	for (const auto& piece : blackPieces) {
+		if (piece.getType() == KING) {
+			score -= 2; // Kings are worth more
+		}
+	}
+	return score;
 }
 
 void Board::restart(bool switchSides) {
@@ -23,12 +39,13 @@ void Board::restart(bool switchSides) {
 
 	if (switchSides) {
 		bottomPlayerWhite = !bottomPlayerWhite;
-		if (bottomPlayerWhite) {
-			currentColor = WHITE;
-		}
-		else {
-			currentColor = BLACK;
-		}
+	}
+
+	if (bottomPlayerWhite) {
+		currentColor = WHITE;
+	}
+	else {
+		currentColor = BLACK;
 	}
 
 	whitePieces.push_back(Piece(MAN, WHITE, { 0, 7 }));
@@ -57,6 +74,11 @@ void Board::restart(bool switchSides) {
 	blackPieces.push_back(Piece(MAN, BLACK, { 6, 1 }));
 	blackPieces.push_back(Piece(MAN, BLACK, { 7, 0 }));
 	blackPieces.push_back(Piece(MAN, BLACK, { 7, 2 }));
+}
+
+void Board::restart(bool switchSides, bool vsAI) {
+	restart(switchSides);
+	this->vsAI = vsAI;
 }
 
 Board::Board() {
@@ -106,7 +128,7 @@ std::optional<std::reference_wrapper<Piece>> Board::getPieceAt(const Position po
 	return std::nullopt;
 }
 
-void Board::makeMove(Move& move) {
+void Board::makeMove(Move& move, bool madeByAI) {
 	auto changeTurn = [](Board *board) {
 		if (board->currentColor == WHITE) {
 			board->currentColor = BLACK;
@@ -148,11 +170,22 @@ void Board::makeMove(Move& move) {
 	}
 
 	// promote to king
-	if (move.piece->getColor() == WHITE && move.piece->getPosition().y == 0) {
+	if ((move.piece->getColor() == WHITE && move.piece->getPosition().y == 0) ||
+		(move.piece->getColor() == BLACK && move.piece->getPosition().y == height - 1)) {
 		move.piece->setType(KING);
 	}
-	else if (move.piece->getColor() == BLACK && move.piece->getPosition().y == height - 1) {
-		move.piece->setType(KING);
+
+	// if vsAI, make AI move and change turn to yours again
+	if (vsAI && !madeByAI) {
+		// TODO: handle multi-capture
+		AI ai;
+		Move newMove = ai.getBestMove(*this, 1);
+		// ai.makeMove(*this);
+		std::cout << "Turn: " << currentColor << std::endl;
+		std::cout << "New move: " << newMove.newPos.x << ", " << newMove.newPos.y << " : " << newMove.piece->getType() << std::endl;
+		makeMove(newMove, true);
+		std::cout << "Turn: " << currentColor << std::endl;
+		// changeTurn(this);
 	}
 }
 

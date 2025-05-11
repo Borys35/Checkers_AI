@@ -1,6 +1,8 @@
 #include <iostream>
 
 #include "Display.h"
+#include "Board.hpp"
+#include "Piece.hpp"
 
 Display::Display(Board& board) : board(board) {
 }
@@ -19,12 +21,12 @@ void Display::recordMouseClick(const sf::Event::MouseButtonPressed* event) {
 	else if (mousePos.x > 768 && mousePos.x <= 896 && mousePos.y > 500 && mousePos.y <= 600) {
 		// vs AI
 		selectedPiece = nullptr;
-		board.restart(false);
+		board.restart(false, true);
 	}
 	else if (mousePos.x > 896 && mousePos.x <= 1024 && mousePos.y > 500 && mousePos.y <= 600) {
 		// vs Player
 		selectedPiece = nullptr;
-		board.restart(false);
+		board.restart(false, false);
 	}
 
 	int x = mousePos.x / 96;
@@ -39,7 +41,7 @@ void Display::recordMouseClick(const sf::Event::MouseButtonPressed* event) {
 			for (auto& move : moves) {
 				if (move.newPos.x == x && move.newPos.y == y) {
 					// Move the piece
-					board.makeMove(move);
+					board.makeMove(move, false);
 					selectedPiece = nullptr;
 					break;
 				}
@@ -131,6 +133,17 @@ void Display::drawBoard(sf::RenderWindow& window) {
 	text.setCharacterSize(32);
 	text.setFillColor(sf::Color::Red);
 	text.setPosition({ 768.f, 0.f });
+	window.draw(text);
+
+	if (board.isVsAI()) {
+		text.setString("vs AI");
+	}
+	else {
+		text.setString("Player vs Player");
+	}
+	text.setCharacterSize(24);
+	text.setFillColor(sf::Color::Red);
+	text.setPosition({ 768.f, 40.f });
 	window.draw(text);
 
 	// TODO: Add switch sides functionality

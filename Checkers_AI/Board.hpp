@@ -21,10 +21,12 @@ public:
 	std::vector<Move> getValidMoves(Piece& piece, bool checkAllMoves);
 	std::vector<Move> getAllValidMoves();
 	std::optional<std::reference_wrapper<Piece>> getPieceAt(const Position pos);
-	void makeMove(Move& move);
+	void makeMove(Move& move, bool madeByAI);
 	void restart(bool switchSides);
+	void restart(bool switchSides, bool vsAI);
 	bool isGameOver() const;
 	bool isBottomPlayerWhite() const;
+	bool isVsAI() const;
 	int evaluateBoard() const;
 
 private:
@@ -38,4 +40,5 @@ private:
 	PieceColor currentColor = WHITE;
 	bool bottomPlayerWhite = true;
 	bool gameOver = false;
+	bool vsAI = false;
 };

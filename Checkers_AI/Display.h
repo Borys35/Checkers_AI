@@ -3,8 +3,8 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 
-#include "Board.hpp"
-#include "Piece.hpp"
+class Piece;
+class Board;
 
 
 class Display
