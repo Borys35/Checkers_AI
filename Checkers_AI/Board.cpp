@@ -155,7 +155,13 @@ void Board::makeMove(Move& move, bool madeByAI) {
 		else {
 			for (auto& validMove : validMoves) {
 				if (validMove.capturePiece != nullptr) {
+
 					changeTurnFlag = false;
+					if (!vsAI) {
+					}
+					else {
+						makeMove(validMove, true);
+					}
 					break;
 				}
 			}
