@@ -42,10 +42,10 @@ void Board::restart(bool switchSides) {
 	}
 
 	if (bottomPlayerWhite) {
-		currentColor = WHITE;
+		//currentColor = WHITE;
 	}
 	else {
-		currentColor = BLACK;
+		//currentColor = BLACK;
 	}
 
 	whitePieces.push_back(Piece(MAN, WHITE, { 0, 7 }));
@@ -74,11 +74,17 @@ void Board::restart(bool switchSides) {
 	blackPieces.push_back(Piece(MAN, BLACK, { 6, 1 }));
 	blackPieces.push_back(Piece(MAN, BLACK, { 7, 0 }));
 	blackPieces.push_back(Piece(MAN, BLACK, { 7, 2 }));
+
+	// if top player moves first, move first piece in-place to change turns :)
+	if (bottomPlayerWhite == false) {
+		Move firstMove = { &whitePieces[0], whitePieces[0].getPosition(), nullptr};
+		makeMove(firstMove, false);
+	}
 }
 
 void Board::restart(bool switchSides, bool vsAI) {
-	restart(switchSides);
 	this->vsAI = vsAI;
+	restart(switchSides);
 }
 
 Board::Board() {
