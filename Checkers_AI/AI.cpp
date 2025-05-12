@@ -15,7 +15,7 @@ void AI::makeMove(Board& board) {
 	board.makeMove(move, true);
 }
 
-int AI::minimax(Board board, int depth, int alpha, int beta, bool isMaximizing) {
+int AI::minimax(Board& board, int depth, int alpha, int beta, bool isMaximizing) {
 	if (depth == 0 || board.isGameOver()) {
 		return board.evaluateBoard();
 	}
@@ -50,16 +50,28 @@ int AI::minimax(Board board, int depth, int alpha, int beta, bool isMaximizing) 
 	}
 }
 
-Move AI::getBestMove(Board& board, int depth) {
-	// TODO: make AI smarter
-	Move bestMove;
-	int bestValue = -1000;
-	auto moves = board.getAllValidMoves();
-	for (auto& move : moves) {
-		Board tempBoard = board;
-		// tempBoard.makeMove(move);
+Move AI::getBestMove(Board& board, int depth) {  
+	// TODO: make AI smarter  
+	Move bestMove;  
+	bool isMaximizing = !board.isBottomPlayerWhite();  
+	int bestValue = -1000;  
+	Board tempBoard = board.clone();
+	auto moves = tempBoard.getAllValidMoves();  
+	int bestIndex = -1;
+	for (int i = 0; i < moves.size(); i++) {
+		 // Create a deep copy of the board 
+		tempBoard.makeMove(moves[i], true);
+		int moveValue = minimax(tempBoard, depth - 1, -1000, 1000, !isMaximizing);  
+		if (moveValue > bestValue) {  
+			bestValue = moveValue;  
+			bestMove = moves[i];
+			bestIndex = i;
+		}
 	}
-	bestMove = moves[0];
-	std::cout << "Best move: " << bestMove.newPos.x << ", " << bestMove.newPos.y << " : " << bestMove.piece->getType() << std::endl;
-	return bestMove;
+	if (bestIndex == -1) {
+		std::cout << "No valid moves available." << std::endl;
+		return bestMove; // Return an empty move or handle it as needed
+	}
+	bestMove = board.getAllValidMoves()[bestIndex];
+	return bestMove;  
 }

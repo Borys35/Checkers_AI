@@ -90,10 +90,30 @@ void Board::restart(bool switchSides, bool vsAI) {
 Board::Board() {
 	restart(false);
 }
+
  
 Board::~Board() {
 	blackPieces.clear();
 	whitePieces.clear();
+}
+
+Board Board::clone() const {
+	Board newBoard;
+	newBoard.width = width;
+	newBoard.height = height;
+	newBoard.whitePiecesCount = whitePiecesCount;
+	newBoard.blackPiecesCount = blackPiecesCount;
+	newBoard.currentColor = currentColor;
+	newBoard.bottomPlayerWhite = bottomPlayerWhite;
+	newBoard.gameOver = gameOver;
+	newBoard.vsAI = vsAI;
+	for (Piece piece : whitePieces) {
+		newBoard.whitePieces.push_back(piece);
+	}
+	for (Piece piece : blackPieces) {
+		newBoard.blackPieces.push_back(piece);
+	}
+	return newBoard;
 }
 
 void Board::capture(Piece& piece) {
@@ -189,15 +209,9 @@ void Board::makeMove(Move& move, bool madeByAI) {
 
 	// if vsAI, make AI move and change turn to yours again
 	if (vsAI && !madeByAI) {
-		// TODO: handle multi-capture
 		AI ai;
-		Move newMove = ai.getBestMove(*this, 1);
-		// ai.makeMove(*this);
-		std::cout << "Turn: " << currentColor << std::endl;
-		std::cout << "New move: " << newMove.newPos.x << ", " << newMove.newPos.y << " : " << newMove.piece->getType() << std::endl;
+		Move newMove = ai.getBestMove(*this, 2);
 		makeMove(newMove, true);
-		std::cout << "Turn: " << currentColor << std::endl;
-		// changeTurn(this);
 	}
 }
 

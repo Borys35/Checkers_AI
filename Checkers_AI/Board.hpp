@@ -28,6 +28,7 @@ public:
 	bool isBottomPlayerWhite() const;
 	bool isVsAI() const;
 	int evaluateBoard() const;
+	Board clone() const;
 
 private:
 	void capture(Piece& piece);
