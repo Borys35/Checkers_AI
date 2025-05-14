@@ -1,4 +1,5 @@
 #include <iostream>
+#include <filesystem>
 
 #include "Display.h"
 #include "Board.hpp"
@@ -60,7 +61,11 @@ void Display::drawBoard(sf::RenderWindow& window) {
 	sf::CircleShape smallCircle(8.f);
 	smallCircle.setFillColor(sf::Color::Blue);
 
-	sf::Font font("inter.ttf");
+	sf::Font font;
+	if (!font.openFromFile("inter.ttf")) {
+		std::cerr << "Font loading failed in Release mode\n";
+	}
+
 	sf::Text text(font);
 
 	for (int i = 0; i < width; i++) {
