@@ -146,6 +146,19 @@ void Display::drawBoard(sf::RenderWindow& window) {
 	text.setPosition({ 768.f, 40.f });
 	window.draw(text);
 
+	text.setString("Current Pos Eval: " + std::to_string(board.evaluateBoard()));
+	text.setCharacterSize(16);
+	text.setPosition({ 768.f, 80.f });
+	window.draw(text);
+
+	if (board.isGameOver()) {
+		text.setString("Game Over");
+		text.setCharacterSize(32);
+		text.setFillColor(sf::Color::Red);
+		text.setPosition({ 768.f, 120.f });
+		window.draw(text);
+	}
+
 	// TODO: Add switch sides functionality
 	text.setString("Switch sides");
 	text.setCharacterSize(16);

@@ -220,7 +220,7 @@ void Board::makeMove(Move& move, bool madeByAI) {
 	}
 
 	// if vsAI, make AI move and change turn to yours again
-	if (vsAI && !madeByAI) {
+	if (vsAI && !madeByAI && !gameOver) {
 		AI ai;
 		Move newMove = ai.getBestMove(*this, 7);
 		makeMove(newMove, true);
