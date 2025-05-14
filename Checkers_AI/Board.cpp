@@ -15,18 +15,34 @@ bool Board::isVsAI() const {
 	return vsAI;
 }
 
+void Board::setVsAI(bool vsAI) {
+	this->vsAI = vsAI;
+}
+
 int Board::evaluateBoard() const {
-	int score = whitePiecesCount - blackPiecesCount;
-	for (const auto& piece : whitePieces) {
-		if (piece.getType() == KING) {
-			score += 2; // Kings are worth more
-		}
-	}
+	int score = 0;
+
+	// Piece count and positioning
 	for (const auto& piece : blackPieces) {
 		if (piece.getType() == KING) {
-			score -= 2; // Kings are worth more
+			score -= 25;
+		}
+		else {
+			score -= 5;
+			score -= piece.getPosition().y;
 		}
 	}
+
+	for (const auto& piece : whitePieces) {
+		if (piece.getType() == KING) {
+			score += 25;
+		}
+		else {
+			score += 5;
+			score += (7 - piece.getPosition().y);
+		}
+	}
+
 	return score;
 }
 
@@ -36,16 +52,10 @@ void Board::restart(bool switchSides) {
 	whitePiecesCount = 12;
 	blackPiecesCount = 12;
 	gameOver = false;
+	currentColor = WHITE;
 
 	if (switchSides) {
 		bottomPlayerWhite = !bottomPlayerWhite;
-	}
-
-	if (bottomPlayerWhite) {
-		//currentColor = WHITE;
-	}
-	else {
-		//currentColor = BLACK;
 	}
 
 	whitePieces.push_back(Piece(MAN, WHITE, { 0, 7 }));
@@ -107,6 +117,8 @@ Board Board::clone() const {
 	newBoard.bottomPlayerWhite = bottomPlayerWhite;
 	newBoard.gameOver = gameOver;
 	newBoard.vsAI = vsAI;
+	newBoard.whitePieces.clear();
+	newBoard.blackPieces.clear();
 	for (Piece piece : whitePieces) {
 		newBoard.whitePieces.push_back(piece);
 	}
@@ -136,7 +148,7 @@ void Board::capture(Piece& piece) {
 
 	if (blackPiecesCount == 0 || whitePiecesCount == 0) {
 		gameOver = true;
-		std::cout << "Game Over!" << std::endl;
+		// std::cout << "Game Over!" << std::endl;
 	}
 }
 
@@ -185,7 +197,7 @@ void Board::makeMove(Move& move, bool madeByAI) {
 					changeTurnFlag = false;
 					if (!vsAI) {
 					}
-					else {
+					else if (vsAI) {
 						makeMove(validMove, true);
 					}
 					break;
@@ -210,7 +222,7 @@ void Board::makeMove(Move& move, bool madeByAI) {
 	// if vsAI, make AI move and change turn to yours again
 	if (vsAI && !madeByAI) {
 		AI ai;
-		Move newMove = ai.getBestMove(*this, 2);
+		Move newMove = ai.getBestMove(*this, 7);
 		makeMove(newMove, true);
 	}
 }

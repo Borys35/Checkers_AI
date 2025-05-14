@@ -8,7 +8,6 @@ class AI
 public:
 	AI();
 	~AI();
-	void makeMove(Board& board);
 	Move getBestMove(Board& board, int depth);
 
 private:

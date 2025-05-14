@@ -27,6 +27,8 @@ public:
 	bool isGameOver() const;
 	bool isBottomPlayerWhite() const;
 	bool isVsAI() const;
+	void setVsAI(bool vsAI);
+	PieceColor getCurrentColor() const { return currentColor; }
 	int evaluateBoard() const;
 	Board clone() const;
 
